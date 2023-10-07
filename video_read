@@ -1,0 +1,29 @@
+import cv2,glob
+from PIL import Image
+
+#读取视频
+def readtest():
+    videoname = 'car_move.mp4'#待填写
+    capture = cv2.VideoCapture(videoname)
+    if capture.isOpened():
+        #while True:
+            ret,img=capture.read() # img 就是一帧图片
+            bmg = Image.fromarray(img)
+            bmg.save('car_test.jpg')
+            return img            
+            #  对于视频的具体处理可以在这一段进行
+            # if not ret:break # 当获取完最后一帧就结束
+    else:
+        print('视频打开失败！')
+
+#保存视频
+def writetest():
+    videoname = 'videoname_out.avi'         #输出文件名
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')#指定编码器
+    writer = cv2.VideoWriter(videoname, fourcc, 1.0, (1280,960),True)   # “1.0”是帧率，（1280，960）是视频尺寸，“Ture”表示彩色
+    imgpaths = glob.glob('*.jpg')   #glob模块可以查找所有符合格式的文件；比如这边就是查找所有jpg格式的文件
+    for path in imgpaths:
+        print(path)
+        img = cv2.imread(path)
+        writer.write(img)	# 读取图片后一帧帧写入到视频中
+    writer.release()
